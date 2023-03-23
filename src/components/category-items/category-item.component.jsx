@@ -1,9 +1,9 @@
 import "./category-item.styles.scss";
 
 function CategoryItem(params) {
-  const { id, title, imageUrl } = params.categoryItem;
+  const {title, imageUrl } = params.categoryItem;
   return (
-    <div key={id} className="category-container">
+    <div className="category-container">
       <div
         className="background-image"
         style={{
