@@ -7,6 +7,14 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collectionGroup,
+} from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAA1QJ56ar_KBA7aSYiarUQmT3R03-6H9k",
   authDomain: "react-crwn-project.firebaseapp.com",
@@ -24,6 +32,30 @@ provider.setCustomParameters({
   prompt: "select_account",
 });
 
-export const auth = getAuth();
+export const auth = getAuth(app);
 
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+export const db = getFirestore();
+
+export const createUserDocumentFromAuth = async (userAuth) => {
+  console.log("userAuth:", userAuth);
+  const userDocRef = doc(db, "users", userAuth.uid);
+
+  const userSnapShot = await getDoc(userDocRef);
+
+  if (!userSnapShot.exists()) {
+    try {
+      const { displayName, email } = userAuth;
+      const createdAt = new Date();
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log("user creation error:", error.message);
+    }
+  }
+  return userSnapShot;
+};
