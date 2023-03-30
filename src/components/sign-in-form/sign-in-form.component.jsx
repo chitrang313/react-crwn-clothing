@@ -35,6 +35,11 @@ function SignInForm(params) {
       console.log("response", response);
       resetFormField();
     } catch (error) {
+      if (error.code === "auth/wrong-password"){
+        alert(`incorrect password for ${email}`);
+      }else if (error.code === "auth/user-not-found") {
+        alert(`user not found for ${email}`);
+      }
       console.log("error", error.message);
     }
   };
@@ -62,7 +67,7 @@ function SignInForm(params) {
         />
         <div className="buttons-container">
           <Button type="submit">sign in</Button>
-          <Button buttonType="google" onClick={onGoogleSignInHandler}>
+          <Button type="button" buttonType="google" onClick={onGoogleSignInHandler}>
             sign-in with google
           </Button>
         </div>
